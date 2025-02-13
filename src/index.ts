@@ -1,20 +1,35 @@
-// import type { Core } from '@strapi/strapi';
+import { generateGeminiApiResponse } from "./utils/geminiApi";
 
 export default {
-  /**
-   * An asynchronous register function that runs before
-   * your application is initialized.
-   *
-   * This gives you an opportunity to extend code.
-   */
-  register(/* { strapi }: { strapi: Core.Strapi } */) {},
+  register(/* { strapi } */) {},
 
-  /**
-   * An asynchronous bootstrap function that runs before
-   * your application gets started.
-   *
-   * This gives you an opportunity to set up your data model,
-   * run jobs, or perform some special logic.
-   */
-  bootstrap(/* { strapi }: { strapi: Core.Strapi } */) {},
+  bootstrap({ strapi }) {
+    const io = require("socket.io")(strapi.server.httpServer, {
+      cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+      },
+    });
+
+    strapi.io = io;
+
+    io.on("connection",  (socket) => {
+
+      socket.on("sendMessage", async (data) => {
+        const prompt : string = data.text;
+
+        const response = await generateGeminiApiResponse(prompt);
+
+        data.text = response;
+        data.sender = "received"
+        io.emit("receiveMessage", data);
+      });
+
+      socket.on("disconnect", () => {
+        console.log("🔴 User disconnected:", socket.id);
+      });
+    });
+
+    console.log("✅ Socket.io initialized successfully");
+  },
 };
