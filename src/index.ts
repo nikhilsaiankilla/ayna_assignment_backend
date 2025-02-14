@@ -6,7 +6,7 @@ export default {
   bootstrap({ strapi }) {
     const io = require("socket.io")(strapi.server.httpServer, {
       cors: {
-        origin: "https://ayna-assignment-frontend-tan.vercel.app/",
+        origin: "https://ayna-assignment-frontend-tan.vercel.app",
         methods: ["GET", "POST"],
       },
     });
