@@ -30,6 +30,6 @@ export default {
       });
     });
 
-    // console.log("✅ Socket.io initialized successfully");
+    console.log("✅ Socket.io initialized successfully");
   },
 };
