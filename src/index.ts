@@ -6,7 +6,7 @@ export default {
   bootstrap({ strapi }) {
     const io = require("socket.io")(strapi.server.httpServer, {
       cors: {
-        origin: "http://localhost:3000",
+        origin: "https://ayna-assignment-frontend-tan.vercel.app/",
         methods: ["GET", "POST"],
       },
     });
@@ -26,10 +26,10 @@ export default {
       });
 
       socket.on("disconnect", () => {
-        console.log("🔴 User disconnected:", socket.id);
+        // send the disconnected message
       });
     });
 
-    console.log("✅ Socket.io initialized successfully");
+    // console.log("✅ Socket.io initialized successfully");
   },
 };
